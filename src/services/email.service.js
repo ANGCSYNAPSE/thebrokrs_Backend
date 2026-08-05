@@ -33,9 +33,15 @@ const initTransporter = () => {
 initTransporter();
 
 /**
- * Generate a random 6-digit OTP
+ * Generate OTP.
+ * Testing mode (default ON): always returns '1234' so you can verify
+ * without checking email. Set USE_TEST_OTP=false in env to switch to
+ * real random 6-digit OTPs for production.
  */
 export const generateOTP = () => {
+  if (process.env.USE_TEST_OTP !== 'false') {
+    return '1234';
+  }
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
