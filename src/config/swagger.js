@@ -17,14 +17,12 @@ const options = {
         email: 'info@thebrokrs.com',
       },
     },
+    // relative URL: Swagger UI executes requests against whatever host
+    // is currently serving this page (localhost, Vercel preview/prod, custom domain)
     servers: [
       {
-        url: 'http://localhost:5000',
-        description: 'Development Server',
-      },
-      {
-        url: process.env.API_URL || 'https://api.thebrokrs.com',
-        description: 'Production Server',
+        url: '/',
+        description: 'Current Server',
       },
     ],
     components: {
