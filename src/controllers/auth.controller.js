@@ -89,26 +89,16 @@ export const register = async (req, res) => {
     // Send OTP via email
     const emailResult = await sendOTPEmail(email, otp, name);
 
-    // Generate tokens
-    const { accessToken, refreshToken } = generateTokens(user);
-
-    // Update refresh token
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { refreshToken }
-    });
-
-    return sendSuccess(res, 'User registered successfully. OTP sent to your email', {
+    return sendSuccess(res, 'User registered successfully. OTP sent to your email. Please verify to continue.', {
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
         phone: user.phone || null,
-        isVerified: user.isVerified
+        isVerified: false
       },
       emailSent: emailResult.success,
-      accessToken,
-      refreshToken,
+      nextStep: 'verify-otp'
     }, 201);
 
   } catch (error) {
@@ -212,13 +202,25 @@ export const verifyOtp = async (req, res) => {
     // Send welcome email
     await sendWelcomeEmail(email, user.name);
 
-    return sendSuccess(res, 'Email verified successfully', {
+    // Generate tokens after OTP verification
+    const { accessToken, refreshToken } = generateTokens(updatedUser);
+
+    // Update refresh token in database
+    await prisma.user.update({
+      where: { id: updatedUser.id },
+      data: { refreshToken }
+    });
+
+    return sendSuccess(res, 'Email verified successfully. Account activated!', {
       user: {
         id: updatedUser.id,
         name: updatedUser.name,
         email: updatedUser.email,
+        phone: updatedUser.phone,
         isVerified: updatedUser.isVerified
-      }
+      },
+      accessToken,
+      refreshToken
     });
 
   } catch (error) {
