@@ -33,6 +33,11 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // API Documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Root
+app.get('/', (req, res) => {
+  res.json({ status: 'TheBrokrs API is running', docs: '/api/docs', health: '/health' });
+});
+
 // Health Check
 app.get('/health', (req, res) => {
   res.json({ status: 'API is running', timestamp: new Date() });

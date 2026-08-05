@@ -42,7 +42,8 @@ const options = {
       },
     ],
   },
-  apis: [path.join(__dirname, '../routes/*.js')],
+  // glob (used internally by swagger-jsdoc) requires forward slashes even on Windows
+  apis: [path.join(__dirname, '../routes/*.js').split(path.sep).join('/')],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
