@@ -4,12 +4,17 @@ const errorHandler = (err, req, res, next) => {
 
   console.error(`❌ Error [${status}]:`, message);
 
-  res.status(status).json({
+  // Only expose minimal error info to clients
+  const payload = {
     success: false,
-    status,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-  });
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    payload.stack = err.stack;
+  }
+
+  res.status(status).json(payload);
 };
 
 export default errorHandler;

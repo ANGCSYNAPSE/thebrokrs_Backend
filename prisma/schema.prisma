@@ -34,6 +34,8 @@ model User {
   
   // Tokens
   refreshToken  String?
+  resetToken    String?
+  resetTokenExpiresAt DateTime?
   
   // KYC
   phoneVerified    Boolean @default(false)

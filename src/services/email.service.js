@@ -1,4 +1,10 @@
 import nodemailer from 'nodemailer';
+import {
+  otpEmailTemplate,
+  welcomeEmailTemplate,
+  passwordResetEmailTemplate,
+  accountVerificationTemplate,
+} from '../templates/emailTemplates.js';
 
 // Create transporter
 let transporter;

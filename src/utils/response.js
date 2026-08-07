@@ -17,14 +17,14 @@
  */
 export const successResponse = (message, data = null) => {
   const response = {
-    status: true,
+    success: true,
     message,
   };
-  
+
   if (data !== null && data !== undefined) {
     response.data = data;
   }
-  
+
   return response;
 };
 
@@ -35,16 +35,10 @@ export const successResponse = (message, data = null) => {
  * @returns {object} Formatted response object
  */
 export const errorResponse = (message, error = null) => {
-  const response = {
-    status: false,
+  return {
+    success: false,
     message,
   };
-  
-  if (error !== null && error !== undefined) {
-    response.error = error;
-  }
-  
-  return response;
 };
 
 /**
@@ -66,7 +60,25 @@ export const sendSuccess = (res, message, data = null, statusCode = 200) => {
  * @param {any} error - Error details (optional)
  */
 export const sendError = (res, message, statusCode = 400, error = null) => {
-  res.status(statusCode).json(errorResponse(message, error));
+  // Log internal error details server-side for debugging if provided
+  if (error) {
+    try {
+      // eslint-disable-next-line no-console
+      console.error('Internal error:', error);
+
+      // Prisma known error: missing column in DB
+      if (error.code === 'P2022') {
+        const col = error?.meta?.column || 'unknown_column';
+        const model = error?.meta?.modelName || 'database model';
+        const friendly = `Database schema mismatch: missing column ${col} on ${model}. Run your Prisma migrations (e.g. \`npx prisma migrate dev\`) or add the column.`;
+        return res.status(500).json(errorResponse(friendly));
+      }
+    } catch (err) {
+      // swallow logging errors
+    }
+  }
+
+  res.status(statusCode).json(errorResponse(message));
 };
 
 /**
