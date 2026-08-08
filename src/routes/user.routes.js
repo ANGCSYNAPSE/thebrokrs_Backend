@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken } from '../middleware/auth.js';
+import { verifyToken, verifyRole } from '../middleware/auth.js';
 import {
   getUserProfile,
   updateUserProfile,
@@ -203,6 +203,6 @@ router.get('/:id', getUserById);
  *       200:
  *         description: All users retrieved
  */
-router.get('/', getAllUsers);
+router.get('/', verifyToken, verifyRole(['admin']), getAllUsers);
 
 export default router;
