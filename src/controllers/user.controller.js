@@ -36,7 +36,7 @@ export const getUserProfile = async (req, res) => {
     return sendSuccess(res, 'User profile retrieved successfully', user);
   } catch (error) {
     console.error('Get profile error:', error);
-    return sendError(res, error.message || 'Failed to get user profile', 500, error);
+    return sendError(res, 'Failed to get user profile', 500, error);
   }
 };
 
@@ -72,7 +72,7 @@ export const updateUserProfile = async (req, res) => {
     return sendSuccess(res, 'Profile updated successfully', user);
   } catch (error) {
     console.error('Update profile error:', error);
-    return sendError(res, error.message || 'Failed to update profile', 500, error);
+    return sendError(res, 'Failed to update profile', 500, error);
   }
 };
 
@@ -101,7 +101,7 @@ export const getUserById = async (req, res) => {
     return sendSuccess(res, 'User retrieved successfully', user);
   } catch (error) {
     console.error('Get user by ID error:', error);
-    return sendError(res, error.message || 'Failed to get user', 500, error);
+    return sendError(res, 'Failed to get user', 500, error);
   }
 };
 
@@ -150,7 +150,7 @@ export const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     console.error('Get all users error:', error);
-    return sendError(res, error.message || 'Failed to get users', 500, error);
+    return sendError(res, 'Failed to get users', 500, error);
   }
 };
 
@@ -184,6 +184,6 @@ export const updateKycStatus = async (req, res) => {
     return sendSuccess(res, 'KYC status updated successfully', user);
   } catch (error) {
     console.error('Update KYC error:', error);
-    return sendError(res, error.message || 'Failed to update KYC status', 500, error);
+    return sendError(res, 'Failed to update KYC status', 500, error);
   }
 };

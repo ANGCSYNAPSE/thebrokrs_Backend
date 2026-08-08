@@ -106,7 +106,7 @@ export const register = async (req, res) => {
 
   } catch (error) {
     console.error('Register error:', error);
-    return sendError(res, error.message || 'Registration failed', 500, error);
+    return sendError(res, 'Registration failed', 500, error);
   }
 };
 
@@ -161,7 +161,7 @@ export const login = async (req, res) => {
 
   } catch (error) {
     console.error('Login error:', error);
-    return sendError(res, error.message || 'Login failed', 500, error);
+    return sendError(res, 'Login failed', 500, error);
   }
 };
 
@@ -228,7 +228,7 @@ export const verifyOtp = async (req, res) => {
 
   } catch (error) {
     console.error('Verify OTP error:', error);
-    return sendError(res, error.message || 'OTP verification failed', 500, error);
+    return sendError(res, 'OTP verification failed', 500, error);
   }
 };
 
@@ -271,7 +271,7 @@ export const resendOtp = async (req, res) => {
 
   } catch (error) {
     console.error('Resend OTP error:', error);
-    return sendError(res, error.message || 'Resend OTP failed', 500, error);
+    return sendError(res, 'Resend OTP failed', 500, error);
   }
 };
 
@@ -308,7 +308,7 @@ export const requestPasswordResetOtp = async (req, res) => {
     });
   } catch (error) {
     console.error('Request password reset OTP error:', error);
-    return sendError(res, error.message || 'Failed to request password reset OTP', 500, error);
+    return sendError(res, 'Failed to request password reset OTP', 500, error);
   }
 };
 
@@ -351,7 +351,7 @@ export const verifyPasswordResetOtp = async (req, res) => {
     });
   } catch (error) {
     console.error('Verify password reset OTP error:', error);
-    return sendError(res, error.message || 'Failed to verify OTP', 500, error);
+    return sendError(res, 'Failed to verify OTP', 500, error);
   }
 };
 
@@ -393,7 +393,7 @@ export const resetPassword = async (req, res) => {
     return sendSuccess(res, 'Password changed successfully');
   } catch (error) {
     console.error('Reset password error:', error);
-    return sendError(res, error.message || 'Failed to reset password', 500, error);
+    return sendError(res, 'Failed to reset password', 500, error);
   }
 };
 
@@ -432,7 +432,7 @@ export const changePassword = async (req, res) => {
     return sendSuccess(res, 'Password updated successfully');
   } catch (error) {
     console.error('Change password error:', error);
-    return sendError(res, error.message || 'Failed to change password', 500, error);
+    return sendError(res, 'Failed to change password', 500, error);
   }
 };
 
@@ -477,6 +477,6 @@ export const refreshToken = async (req, res) => {
 
   } catch (error) {
     console.error('Refresh token error:', error);
-    return sendError(res, error.message || 'Token refresh failed', 401, error);
+    return sendError(res, 'Token refresh failed', 401, error);
   }
 };

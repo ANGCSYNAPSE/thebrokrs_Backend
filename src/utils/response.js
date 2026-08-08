@@ -53,32 +53,68 @@ export const sendSuccess = (res, message, data = null, statusCode = 200) => {
 };
 
 /**
+ * Map an internal/raw error to a short, safe, client-facing message.
+ * Never leak stack traces, DB column/table names, connection strings,
+ * or provider-specific internals — those stay in server-side logs only.
+ * @param {any} error - The caught error object
+ * @returns {string} Short, safe message describing the category of failure
+ */
+const getSafeErrorMessage = (error) => {
+  if (!error) return 'Something went wrong. Please try again later.';
+
+  // JWT / authorization errors
+  if (['JsonWebTokenError', 'TokenExpiredError', 'NotBeforeError'].includes(error.name)) {
+    return 'Authorization token is missing, invalid, or expired.';
+  }
+
+  // Network / connectivity errors (DB unreachable, external service down, etc.)
+  if (['ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND', 'ECONNRESET', 'EAI_AGAIN'].includes(error.code)) {
+    return 'Service is temporarily unavailable. Please try again later.';
+  }
+
+  // Prisma known error codes (https://www.prisma.io/docs/reference/api-reference/error-reference)
+  if (typeof error.code === 'string' && error.code.startsWith('P')) {
+    switch (error.code) {
+      case 'P2002':
+        return 'A record with this information already exists.';
+      case 'P2025':
+        return 'The requested record was not found.';
+      case 'P2003':
+        return 'This action references data that does not exist.';
+      case 'P1001':
+      case 'P1002':
+        return 'Unable to reach the database. Please try again later.';
+      default:
+        // Includes P2021/P2022 (missing table/column) and any other schema
+        // or query errors — these indicate a server-side misconfiguration,
+        // never something the client can fix or needs the details of.
+        return 'A server error occurred. Please try again later or contact support.';
+    }
+  }
+
+  // Fallback for any other unexpected/internal error
+  return 'Something went wrong on our end. Please try again later.';
+};
+
+/**
  * Send Error Response
  * @param {object} res - Express response object
  * @param {number} statusCode - HTTP status code (default: 400)
  * @param {string} message - Error message
- * @param {any} error - Error details (optional)
+ * @param {any} error - Error details (optional). When provided, the raw
+ *   error is logged server-side only, and the client receives a short,
+ *   safe, categorized message instead of the raw `message` argument.
  */
 export const sendError = (res, message, statusCode = 400, error = null) => {
-  // Log internal error details server-side for debugging if provided
-  if (error) {
-    try {
-      // eslint-disable-next-line no-console
-      console.error('Internal error:', error);
+  let clientMessage = message;
 
-      // Prisma known error: missing column in DB
-      if (error.code === 'P2022') {
-        const col = error?.meta?.column || 'unknown_column';
-        const model = error?.meta?.modelName || 'database model';
-        const friendly = `Database schema mismatch: missing column ${col} on ${model}. Run your Prisma migrations (e.g. \`npx prisma migrate dev\`) or add the column.`;
-        return res.status(500).json(errorResponse(friendly));
-      }
-    } catch (err) {
-      // swallow logging errors
-    }
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error('Internal error:', error);
+    clientMessage = getSafeErrorMessage(error);
   }
 
-  res.status(statusCode).json(errorResponse(message));
+  res.status(statusCode).json(errorResponse(clientMessage));
 };
 
 /**

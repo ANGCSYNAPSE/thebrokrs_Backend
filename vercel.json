@@ -21,6 +21,6 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "buildCommand": "npm install && npx prisma generate",
+  "buildCommand": "npm install && npx prisma migrate deploy && npx prisma generate",
   "outputDirectory": "."
 }

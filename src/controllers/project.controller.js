@@ -44,7 +44,7 @@ export const getAllProjects = async (req, res) => {
     });
   } catch (error) {
     console.error('Get projects error:', error);
-    return sendError(res, error.message || 'Failed to get projects', 500, error);
+    return sendError(res, 'Failed to get projects', 500, error);
   }
 };
 
@@ -69,7 +69,7 @@ export const getProjectById = async (req, res) => {
     return sendSuccess(res, 'Project retrieved successfully', project);
   } catch (error) {
     console.error('Get project error:', error);
-    return sendError(res, error.message || 'Failed to get project', 500, error);
+    return sendError(res, 'Failed to get project', 500, error);
   }
 };
 
@@ -137,7 +137,7 @@ export const createProject = async (req, res) => {
     return sendSuccess(res, 'Project created successfully', project, 201);
   } catch (error) {
     console.error('Create project error:', error);
-    return sendError(res, error.message || 'Failed to create project', 500, error);
+    return sendError(res, 'Failed to create project', 500, error);
   }
 };
 
@@ -160,7 +160,7 @@ export const updateProject = async (req, res) => {
     return sendSuccess(res, 'Project updated successfully', project);
   } catch (error) {
     console.error('Update project error:', error);
-    return sendError(res, error.message || 'Failed to update project', 500, error);
+    return sendError(res, 'Failed to update project', 500, error);
   }
 };
 
@@ -177,6 +177,6 @@ export const deleteProject = async (req, res) => {
     return sendSuccess(res, 'Project deleted successfully', { id: project.id });
   } catch (error) {
     console.error('Delete project error:', error);
-    return sendError(res, error.message || 'Failed to delete project', 500, error);
+    return sendError(res, 'Failed to delete project', 500, error);
   }
 };

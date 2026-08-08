@@ -49,7 +49,7 @@ export const getAllProperties = async (req, res) => {
     });
   } catch (error) {
     console.error('Get properties error:', error);
-    return sendError(res, error.message || 'Failed to get properties', 500, error);
+    return sendError(res, 'Failed to get properties', 500, error);
   }
 };
 
@@ -80,7 +80,7 @@ export const getPropertyById = async (req, res) => {
     return sendSuccess(res, 'Property retrieved successfully', property);
   } catch (error) {
     console.error('Get property error:', error);
-    return sendError(res, error.message || 'Failed to get property', 500, error);
+    return sendError(res, 'Failed to get property', 500, error);
   }
 };
 
@@ -120,7 +120,7 @@ export const createProperty = async (req, res) => {
     return sendSuccess(res, 'Property created successfully', property, 201);
   } catch (error) {
     console.error('Create property error:', error);
-    return sendError(res, error.message || 'Failed to create property', 500, error);
+    return sendError(res, 'Failed to create property', 500, error);
   }
 };
 
@@ -143,7 +143,7 @@ export const updateProperty = async (req, res) => {
     return sendSuccess(res, 'Property updated successfully', property);
   } catch (error) {
     console.error('Update property error:', error);
-    return sendError(res, error.message || 'Failed to update property', 500, error);
+    return sendError(res, 'Failed to update property', 500, error);
   }
 };
 
@@ -160,6 +160,6 @@ export const deleteProperty = async (req, res) => {
     return sendSuccess(res, 'Property deleted successfully', { id: property.id });
   } catch (error) {
     console.error('Delete property error:', error);
-    return sendError(res, error.message || 'Failed to delete property', 500, error);
+    return sendError(res, 'Failed to delete property', 500, error);
   }
 };
